@@ -16,7 +16,7 @@ class CreatePost extends Component
     public $uemail;
     public $uname;
 
-    public $posts;
+    public $posts = 'null';
 
     #[Layout('components.layouts.app')]
 
@@ -75,6 +75,8 @@ class CreatePost extends Component
     public function render()
     {
         $this->posts = Post::all();
+        
+        
         return view('livewire.create-post');
     }
 }

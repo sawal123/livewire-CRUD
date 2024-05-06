@@ -22,33 +22,40 @@
     </form>
     <div class="mt-5">
         <h2>View Data</h2>
-        <table class="table table-dark table-hover">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Email</th>
-                    <th>Name</th>
-                    <th>action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($posts as $key => $vP)
-                    <tr wire:key="{{ $vP->id }}">
-                        <td>{{ $key + 1 }}</td>
-                        <td>{{ $vP->email }}</td>
-                        <td>{{ $vP->name }}</td>
-                        <td>
-                            <button wire:click='delete({{ $vP->id }})'
-                                wire:confirm="Are you sure you want to delete this post?"
-                                class="btn btn-danger">Delete</button>
-                            <button wire:click='edit({{ $vP->id }})' class="btn btn-primary"
-                                data-bs-toggle="modal" data-bs-target="#staticBackdrop">Edit</button>
-                        </td>
-
+        {{-- {{$posts}} --}}
+        @if (!$posts->isEmpty())
+            <table class="table table-dark table-hover">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Email</th>
+                        <th>Name</th>
+                        <th>action</th>
                     </tr>
-                @endforeach
-                @include('components.modalUpdate')
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach ($posts as $key => $vP)
+                        <tr wire:key="{{ $vP->id }}">
+                            <td>{{ $key + 1 }}</td>
+                            <td>{{ $vP->email }}</td>
+                            <td>{{ $vP->name }}</td>
+                            <td>
+                                <button wire:click='delete({{ $vP->id }})'
+                                    wire:confirm="Are you sure you want to delete this post?"
+                                    class="btn btn-danger">Delete</button>
+                                <button wire:click='edit({{ $vP->id }})' class="btn btn-primary"
+                                    data-bs-toggle="modal" data-bs-target="#staticBackdrop">Edit</button>
+                            </td>
+
+                        </tr>
+                    @endforeach
+                    @include('components.modalUpdate')
+                </tbody>
+            </table>
+        @else
+            <h1 class="text-center mt-5">
+                Tidak ada data
+            </h1>
+        @endif
     </div>
 </div>
