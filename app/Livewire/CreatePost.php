@@ -5,9 +5,12 @@ namespace App\Livewire;
 use App\Models\Post;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
+use Livewire\WithPagination;
 
 class CreatePost extends Component
 {
+    use WithPagination;
+    protected $paginationTheme = 'bootstrap';
     public $title = 'Halaman Create Post';
 
     public $idPost;
@@ -15,6 +18,7 @@ class CreatePost extends Component
     public $name;
     public $uemail;
     public $uname;
+    public $katakunci;
 
     public $posts = 'null';
 
@@ -57,26 +61,32 @@ class CreatePost extends Component
         $this->uemail = $post->email;
         $this->uname = $post->name;
     }
-    public function update(){
+    public function update()
+    {
         $rule = [
-            'uname'=> 'required',
-            'uemail'=> 'required|email',
+            'uname' => 'required',
+            'uemail' => 'required|email',
         ];
         $validated = $this->validate($rule);
         $data = Post::find($this->idPost);
         // dd($data);
         $data->update([
-            'email'=> $this->uemail,
-            'name'=> $this->uname
+            'email' => $this->uemail,
+            'name' => $this->uname
         ]);
         session()->flash('status', 'Data berhasil diupdate!');
-
     }
     public function render()
     {
-        $this->posts = Post::all();
-        
-        
-        return view('livewire.create-post');
+
+        if ($this->katakunci != null) {
+            $data = Post::where('name', 'like', '%' . $this->katakunci . '%')->orWhere('email', 'like' , '%' . $this->katakunci . '%')
+            ->orderBy('name', 'asc')->paginate(2);
+        } else {
+            $data = Post::orderBy('name', 'asc')->paginate(2);
+        }
+        return view('livewire.create-post', [
+            'datas' => $data
+        ]);
     }
 }

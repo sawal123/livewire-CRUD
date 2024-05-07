@@ -23,7 +23,13 @@
     <div class="mt-5">
         <h2>View Data</h2>
         {{-- {{$posts}} --}}
-        @if (!$posts->isEmpty())
+
+
+
+        <div class="">
+            <input type="text"  class="form-control mb-3 w-25" placeholder="Searching..." wire:model.live='katakunci'>
+        </div>
+        {{-- @if (!$data->isEmpty()) --}}
             <table class="table table-dark table-hover">
                 <thead>
                     <tr>
@@ -34,16 +40,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($posts as $key => $vP)
-                        <tr wire:key="{{ $vP->id }}">
-                            <td>{{ $key + 1 }}</td>
-                            <td>{{ $vP->email }}</td>
-                            <td>{{ $vP->name }}</td>
+                    @foreach ($datas as $key => $data)
+                        <tr wire:key="{{ $data->id }}">
+                            <td>{{ $datas->firstItem() + $key }}</td>
+                            <td>{{ $data->email }}</td>
+                            <td>{{ $data->name }}</td>
                             <td>
-                                <button wire:click='delete({{ $vP->id }})'
+                                <button wire:click='delete({{ $data->id }})'
                                     wire:confirm="Are you sure you want to delete this post?"
                                     class="btn btn-danger">Delete</button>
-                                <button wire:click='edit({{ $vP->id }})' class="btn btn-primary"
+                                <button wire:click='edit({{ $data->id }})' class="btn btn-primary"
                                     data-bs-toggle="modal" data-bs-target="#staticBackdrop">Edit</button>
                             </td>
 
@@ -52,10 +58,11 @@
                     @include('components.modalUpdate')
                 </tbody>
             </table>
-        @else
+            {{$datas->links()}}
+        {{-- @else
             <h1 class="text-center mt-5">
                 Tidak ada data
             </h1>
-        @endif
+        @endif --}}
     </div>
 </div>
